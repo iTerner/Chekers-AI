@@ -1,0 +1,3 @@
+in order to run this program you need to install pygame
+
+pip install pygame
