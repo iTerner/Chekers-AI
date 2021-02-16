@@ -1,4 +1,5 @@
 import pygame
+import math
 from .constants import BLACK, ROWS, COLS, RED, SQUARE_SIZE, WHITE
 from .piece import Piece
 
@@ -22,9 +23,33 @@ class Board:
         return 3 <= row and row <= 5 and 3 <= col and col <= 5
 
     def evaluate(self):
+        if self.winner() == "white":
+            return math.inf
+
+        t = 0
+
+        for piece in self.get_all_pieces(WHITE):
+            if piece.king:
+                t += 10
+            elif piece.row >= 4:
+                t += 7
+            else:
+                t += 5
+
+        for piece in self.get_all_pieces(RED):
+            if piece.king:
+                t -= 10
+            elif piece.row <= 4:
+                t -= 7
+            else:
+                t -= 5
+
+        return t
+        """
         t = self.white_left - self.red_left + \
             (self.white_kings - self.red_kings) * 0.5
         return t
+        """
 
     def get_all_pieces(self, color):
         pieces = []
@@ -108,6 +133,7 @@ class Board:
 
         return moves
 
+    # check left diagonal for capturing
     def _travers_left(self, start, stop, step, color, left, skipped=[]):
         moves = {}
         last = []
@@ -143,6 +169,7 @@ class Board:
 
         return moves
 
+    # check right diagonal for capturing
     def _travers_right(self, start, stop, step, color, right, skipped=[]):
         moves = {}
         last = []
