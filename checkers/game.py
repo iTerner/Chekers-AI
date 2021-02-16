@@ -36,6 +36,9 @@ class Game:
         if piece != 0 and piece.color == self.turn:
             self.selected = piece
             self.valid_moves = self.board.get_valid_moves(piece)
+            if self.valid_moves == []:
+                print("no more valid moves for player " + str(self.turn))
+                return False
             return True
 
         return False
